@@ -1,0 +1,24 @@
+{
+  "name": "webcrawlerhttp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snake97123/webcrawlerhttp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/snake97123/webcrawlerhttp/issues"
+  },
+  "homepage": "https://github.com/snake97123/webcrawlerhttp#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
