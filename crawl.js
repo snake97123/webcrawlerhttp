@@ -4,31 +4,50 @@
 
 
 // import jsdom package
-const { JSDOM } = import('jsdom')
+// const { JSDOM } = import('jsdom')
+import { JSDOM } from 'jsdom'
 import fetch from 'node-fetch'
 
 
-export async function crawlPage(currentURL) {
+export async function crawlPage(baseURL, currentURL, pages) {
+  if (new URL(currentURL).hostname !== new URL(baseURL).hostname) {
+    return  pages
+  }
+
+  const normalizedCurrentURL = normalizeURL(currentURL)
+  if(normalizedCurrentURL in pages) {
+    pages[normalizedCurrentURL]++
+    return pages
+  }
+
+  pages[normalizedCurrentURL] = 1
   console.log(`actively crawling: ${currentURL}`)
+ 
   try {
     const response = await fetch(currentURL)
     
     if(response.status > 399) {
       console.log(`error: ${response.status} on page: ${currentURL}`)
-      return 
+      return pages
     }
 
     const contentType = response.headers.get('content-type')
     if (!contentType || !contentType.includes('text/html')) {
       console.log(`error: content type is not text/html on page: ${currentURL}`)
-      return
+      return pages
     }
 
-    console.log(await response.text())
+    const htmlBody = await response.text()
+
+    const urls = getURLs(htmlBody, currentURL)
+    for (const url of urls) {
+      pages = await crawlPage(baseURL, url, pages)
+    }
   } catch (error) {
     console.log(`error in fetch: ${error.message}. on page: ${currentURL}`)
   }
 
+   return pages
 }
 
 export function getURLs(htmlbody, baseURL)

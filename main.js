@@ -5,7 +5,7 @@ import { crawlPage } from './crawl.js'
  * If no URL is provided, it logs 'No website provided' and exits the process with a status code of 1.
  * If a URL is provided, it logs 'Starting crawl'.
  */
-function main(){
+async function main(){
   // check command line arguments. 
   // if not enough arguments, output no website provided
   if(process.argv.length < 3){
@@ -24,7 +24,10 @@ function main(){
   const website = process.argv[2]
 
   console.log(`Starting crawl of ${website}`)
-  crawlPage(website)
+  const pages = await crawlPage(website, website, {})
+  for(const [url, count] of Object.entries(pages)){
+    console.log(`${url}: ${count}`)
+  }
 }
 
 main()
