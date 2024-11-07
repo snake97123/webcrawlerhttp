@@ -1,4 +1,4 @@
-const { crawlPage } = require('./crawl.js')
+import { crawlPage } from './crawl.js'
 
 /**
  * The main function checks the command line arguments to determine if a website URL has been provided.

@@ -4,16 +4,34 @@
 
 
 // import jsdom package
-const { JSDOM } = require('jsdom')
+const { JSDOM } = import('jsdom')
+import fetch from 'node-fetch'
 
 
-async function crawlPage(currentURL) {
+export async function crawlPage(currentURL) {
   console.log(`actively crawling: ${currentURL}`)
-  const response = await fetch(currentURL)
-  console.log(response.text())
+  try {
+    const response = await fetch(currentURL)
+    
+    if(response.status > 399) {
+      console.log(`error: ${response.status} on page: ${currentURL}`)
+      return 
+    }
+
+    const contentType = response.headers.get('content-type')
+    if (!contentType || !contentType.includes('text/html')) {
+      console.log(`error: content type is not text/html on page: ${currentURL}`)
+      return
+    }
+
+    console.log(await response.text())
+  } catch (error) {
+    console.log(`error in fetch: ${error.message}. on page: ${currentURL}`)
+  }
+
 }
 
-function getURLs(htmlbody, baseURL)
+export function getURLs(htmlbody, baseURL)
 {
   const urls = []
   const dom = new JSDOM(htmlbody)
@@ -29,7 +47,7 @@ function getURLs(htmlbody, baseURL)
 }
 
 
-function normalizeURL(url) 
+export function normalizeURL(url) 
 {
   const urlObj = new URL(url)
   let normalizedPath = urlObj.pathname
@@ -40,7 +58,7 @@ function normalizeURL(url)
   
 }
 
-function getURLsFromHTML(htmlbody, baseURL) {
+export function getURLsFromHTML(htmlbody, baseURL) {
   const urls = [];
   const dom = new JSDOM(htmlbody);
   const elementLinks = dom.window.document.querySelectorAll('a');
@@ -61,8 +79,11 @@ function getURLsFromHTML(htmlbody, baseURL) {
   return urls;
 }
 
-module.exports = {
-   normalizeURL,
-   getURLs,
-   getURLsFromHTML
-  }
+
+
+// module.exports = {
+//    normalizeURL,
+//    getURLs,
+//    getURLsFromHTML,
+//    crawlPage
+//   }
