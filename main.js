@@ -1,4 +1,5 @@
 import { crawlPage } from './crawl.js'
+import { printReport } from './report.js'
 
 /**
  * The main function checks the command line arguments to determine if a website URL has been provided.
@@ -24,10 +25,8 @@ async function main(){
   const website = process.argv[2]
 
   console.log(`Starting crawl of ${website}`)
-  const pages = await crawlPage(website, website, {})
-  for(const [url, count] of Object.entries(pages)){
-    console.log(`${url}: ${count}`)
-  }
+  const pages = await crawlPage(website, website, {})                         
+  printReport(pages)
 }
 
 main()

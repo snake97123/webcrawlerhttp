@@ -1,5 +1,5 @@
 const { normalizeURL, getURLs, getURLsFromHTML } = import('./crawl.js')
-const { test, expect } = imports('@jest/globals')
+const { test, expect } = import('@jest/globals')
 // import { normalizeURL, getURLs, getURLsFromHTML } from './crawl'
 // import { test, expect } from '@jest/globals'
 
